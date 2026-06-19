@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オリジナル性格診断</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; background: #f9f9f9; }
+        .question { display: none; background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .question.active { display: block; }
+        button { padding: 10px 20px; font-size: 16px; margin: 5px; cursor: pointer; }
+        #result { display: none; background: #fff; padding: 30px; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <h1>オリジナル性格診断</h1>
+
+    <div id="quiz-container">
+        <!-- Q1: E vs I -->
+        <div class="question active" id="q1">
+            <p>1. ひとりで過ごすより、大勢の人といる方がエネルギーが湧く？</p>
+            <button onclick="nextQuestion('e', 1)">はい</button>
+            <button onclick="nextQuestion('i', -1)">いいえ</button>
+        </div>
+
+        <!-- Q2: S vs N -->
+        <div class="question" id="q2">
+            <p>2. 物事を考えるとき、直感やひらめきを重視する？</p>
+            <button onclick="nextQuestion('n', 1)">はい</button>
+            <button onclick="nextQuestion('s', -1)">いいえ</button>
+        </div>
+
+        <!-- Q3: T vs F -->
+        <div class="question" id="q3">
+            <p>3. 決断するときは、感情や人の気持ちを最優先する？</p>
+            <button onclick="nextQuestion('f', 1)">はい</button>
+            <button onclick="nextQuestion('t', -1)">いいえ</button>
+        </div>
+
+        <!-- Q4: J vs P -->
+        <div class="question" id="q4">
+            <p>4. スケジュールや計画を立てて行動するのが好き？</p>
+            <button onclick="nextQuestion('j', 1)">はい</button>
+            <button onclick="nextQuestion('p', -1)">いいえ</button>
+        </div>
+    </div>
+
+    <div id="result">
+        <h2>あなたの診断結果</h2>
+        <p id="result-type" style="font-size: 24px; font-weight: bold; color: #0066cc;"></p>
+        <p id="result-desc"></p>
+        <button onclick="restartQuiz()">もう一度診断する</button>
+    </div>
+
+    <script>
+        let scores = { e: 0, s: 0, t: 0, j: 0 };
+        let currentQuestion = 1;
+
+        function nextQuestion(trait, score) {
+            // スコアを加算
+            scores[trait] += score;
+
+            // 現在の質問を非表示
+            document.getElementById('q' + currentQuestion).classList.remove('active');
+
+            currentQuestion++;
+
+            // 次の質問を表示、または結果を表示
+            if (currentQuestion <= 4) {
+                document.getElementById('q' + currentQuestion).classList.add('active');
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            let resultType = "";
+            resultType += scores.e > 0 ? "E" : "I";
+            resultType += scores.s > 0 ? "S" : "N";
+            resultType += scores.t > 0 ? "T" : "F";
+            resultType += scores.j > 0 ? "J" : "P";
+
+            let description = "あなたの性格タイプは " + resultType + " です。";
+            // 必要に応じてタイプごとの解説を追加できます
+
+            document.getElementById('result-type').innerText = resultType;
+            document.getElementById('result-desc').innerText = description;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function restartQuiz() {
+            scores = { e: 0, s: 0, t: 0, j: 0 };
+            currentQuestion = 1;
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('q1').classList.add('active');
+        }
+    </script>
+</body>
+</html>
